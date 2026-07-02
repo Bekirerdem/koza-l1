@@ -10,6 +10,8 @@ const {
     title = "kozalak-L1 — Türk geliştiriciler için Avalanche L1 starter kit",
     description = "Audit-grade Solidity şablonları, Subnet-EVM, ICTT cross-L1 köprü ve Türkçe rehber. Avalanche L1 ekosistemine giriş kapısı.",
 } = Astro.props;
+
+const ogImage = new URL("/og-image.png", Astro.site);
 ---
 
 <!doctype html>
@@ -34,11 +36,15 @@ const {
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
         <meta property="og:url" content={Astro.site} />
+        <meta property="og:image" content={ogImage} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
 
         <!-- Twitter -->
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={ogImage} />
 
         <title>{title}</title>
     </head>
