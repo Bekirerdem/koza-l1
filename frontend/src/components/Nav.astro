@@ -50,20 +50,83 @@ const links = [
     <!-- Right Action Section -->
     <div class="flex items-center gap-4 px-6 lg:px-8 border-l border-gray-700 h-full">
         <!-- Interactive Theme toggle -->
-        <button 
-            id="theme-toggle" 
+        <button
+            id="theme-toggle"
             class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full border border-gray-700 text-white/50 hover:text-white hover:border-white/50 transition-all cursor-pointer"
             aria-label="Toggle Dark/Light Mode"
         >
             <svg id="theme-icon-light" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="hidden"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
             <svg id="theme-icon-dark" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
         </button>
-        
+
         <a
             href="https://github.com/Bekirerdem/Kozalak-L1"
             target="_blank"
             rel="noopener noreferrer"
-            class="group inline-flex items-center gap-2 px-6 py-2.5 bg-kozalak-red-hot text-true-white font-sans font-bold text-sm rounded-[12px] hover:bg-kozalak-red transition-colors"
+            class="hidden lg:inline-flex group items-center gap-2 px-6 py-2.5 bg-kozalak-red-hot text-true-white font-sans font-bold text-sm rounded-none hover:bg-kozalak-red transition-colors"
+        >
+            GitHub'da İncele
+            <svg
+                width="14"
+                height="14"
+                viewBox="0 0 16 16"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                class="transition-transform group-hover:translate-x-1"
+            >
+                <path
+                    d="M3 8L13 8M13 8L9 4M13 8L9 12"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"></path>
+            </svg>
+        </a>
+
+        <!-- Mobile menu toggle (hidden on lg+) -->
+        <button
+            id="mobile-menu-toggle"
+            class="lg:hidden flex items-center justify-center w-9 h-9 text-white/80 hover:text-white transition-colors cursor-pointer"
+            aria-label="Menüyü aç"
+            aria-expanded="false"
+            aria-controls="mobile-menu"
+        >
+            <svg id="mobile-menu-icon-open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <path d="M3 6h18M3 12h18M3 18h18"/>
+            </svg>
+            <svg id="mobile-menu-icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="hidden">
+                <path d="M6 6l12 12M18 6L6 18"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Mobile menu panel -->
+    <div
+        id="mobile-menu"
+        class="lg:hidden hidden absolute top-[72px] left-0 right-0 bg-bg-pure border-b border-gray-700 flex flex-col"
+    >
+        {
+            links.map((link) => (
+                <a
+                    href={link.href}
+                    target={link.external ? "_blank" : undefined}
+                    rel={link.external ? "noopener noreferrer" : undefined}
+                    class="mobile-menu-link flex items-center gap-1 px-6 py-4 border-b border-gray-700 text-white/80 font-semibold hover:text-white transition-colors"
+                >
+                    {link.label}
+                    {link.isDoc && (
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-white/50">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    )}
+                </a>
+            ))
+        }
+        <a
+            href="https://github.com/Bekirerdem/Kozalak-L1"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="mobile-menu-link group inline-flex items-center justify-center gap-2 m-6 px-6 py-3 bg-kozalak-red-hot text-true-white font-sans font-bold text-sm rounded-none hover:bg-kozalak-red transition-colors"
         >
             GitHub'da İncele
             <svg
@@ -92,10 +155,9 @@ const links = [
     const iconDark = document.getElementById('theme-icon-dark');
 
     themeToggleBtn?.addEventListener('click', () => {
-        // Toggle an active class for demo purposes
-        // Note: For a full light mode, global.css variables need to be inverted for .light-theme
+        // Toggle dark/light theme; global.css defines the inverted .light-theme variables
         document.documentElement.classList.toggle('light-theme');
-        
+
         // Toggle icons
         if (document.documentElement.classList.contains('light-theme')) {
             iconDark?.classList.add('hidden');
@@ -104,5 +166,38 @@ const links = [
             iconLight?.classList.add('hidden');
             iconDark?.classList.remove('hidden');
         }
+    });
+
+    // Mobile menu toggle functionality
+    const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const iconOpen = document.getElementById('mobile-menu-icon-open');
+    const iconClose = document.getElementById('mobile-menu-icon-close');
+
+    function closeMobileMenu() {
+        mobileMenu?.classList.add('hidden');
+        iconClose?.classList.add('hidden');
+        iconOpen?.classList.remove('hidden');
+        mobileMenuToggle?.setAttribute('aria-expanded', 'false');
+        mobileMenuToggle?.setAttribute('aria-label', 'Menüyü aç');
+        document.body.classList.remove('overflow-hidden');
+    }
+
+    function openMobileMenu() {
+        mobileMenu?.classList.remove('hidden');
+        iconOpen?.classList.add('hidden');
+        iconClose?.classList.remove('hidden');
+        mobileMenuToggle?.setAttribute('aria-expanded', 'true');
+        mobileMenuToggle?.setAttribute('aria-label', 'Menüyü kapat');
+        document.body.classList.add('overflow-hidden');
+    }
+
+    mobileMenuToggle?.addEventListener('click', () => {
+        const isOpen = mobileMenuToggle.getAttribute('aria-expanded') === 'true';
+        isOpen ? closeMobileMenu() : openMobileMenu();
+    });
+
+    mobileMenu?.querySelectorAll('.mobile-menu-link').forEach((link) => {
+        link.addEventListener('click', closeMobileMenu);
     });
 </script>
